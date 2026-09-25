@@ -1,0 +1,77 @@
+Build a stock market analysis dashboard for NSE (Indian stock exchange), called 
+"NSE Terminal" or similar. Dark, professional trading-terminal theme throughout 
+(dark background, green for positive/bullish, red for negative/bearish).
+
+=== PAGE 1: STOCK ANALYSIS (main page) ===
+
+Search bar at the top where I can type an NSE stock symbol (e.g. RELIANCE, TCS, 
+INFY) and click "Analyze". Include quick-pick chips for RELIANCE, TCS, INFY, 
+HDFCBANK, SBIN.
+
+When Analyze is clicked, fetch:
+https://nse-stock-api-09zk.onrender.com/analyze/{symbol}
+
+Show a loading spinner while fetching (the API can take up to 60 seconds on its 
+first request if it's been idle — show a message like "Waking up server, this 
+may take up to a minute" if loading takes more than 10 seconds). Show a clear 
+error message if the symbol is invalid or the fetch fails.
+
+Display the response in these cards:
+
+1. HEADER CARD — company name, current price (₹), a bullish/bearish badge based 
+on technical.ma_trend, ROC value, and % of 52-week high
+
+2. If corporate_action_flag is true, show a prominent yellow warning banner with 
+the corporate_action_note text, above the other cards
+
+3. TECHNICAL INDICATORS card:
+   - RSI (14) with a colored gauge (green zone 30-70, red outside, marked 30/70 
+     reference lines)
+   - MACD line, MACD signal, MACD histogram
+   - ROC (12)
+   - ADX (14)
+   - Bollinger %B and bandwidth
+
+4. MOVING AVERAGES card — MA 50, MA 200, a bullish/bearish badge, and a note 
+whether it's a "Golden alignment" (MA50 > MA200) or "Death alignment" (MA50 < MA200)
+
+5. FUNDAMENTALS card — these exact fields from the API's fundamentals object:
+   - yoy_earnings_growth_pct (green if positive, red if negative)
+   - yoy_revenue_growth_pct (green if positive, red if negative)
+   - operating_margin_pct
+   - net_margin_pct
+   - roe_pct
+   - debt_to_equity
+   - market_cap_cr (format as "₹X,XX,XXX Cr")
+   Do NOT include a P/E ratio field — it is not returned by this API.
+
+6. CANDLESTICK CHART — below the cards, fetch:
+   https://nse-stock-api-09zk.onrender.com/chart/{symbol}?months=6
+   Response is an array of daily rows: date, open, high, low, close, volume, 
+   rsi, macd_line, macd_signal, ma_50, ma_200.
+   
+   Show:
+   - Main candlestick chart with MA 50 and MA 200 as overlay lines
+   - A smaller RSI panel below it (line chart, 0-100 scale, dashed lines at 30 and 70)
+   - A smaller MACD panel below that (macd_line and macd_signal as two lines, 
+     plus a histogram of their difference — green when positive, red when negative)
+   - Skip any row where volume is 0 and open equals close (market holidays, 
+     not real trading days)
+
+=== PAGE 2: WATCHLIST (new tab/page) ===
+
+Let me add up to 10 NSE symbols to a list, stored in the browser (not persisted 
+to a server — it's fine if it resets on refresh).
+
+Fetch all of them in one call:
+https://nse-stock-api-09zk.onrender.com/watchlist?symbols=SYM1,SYM2,SYM3
+
+Show as a sortable table (click column headers to sort): company, current 
+price, RSI, MACD histogram, MA trend badge, % of 52-week high. Color RSI and 
+MACD histogram green/red based on standard thresholds. Include a "Remove" 
+button per row, and an input + "Add" button to add new symbols.
+
+=== GENERAL ===
+
+Keep the same dark theme consistent across both pages. Make it look polished 
+and production-ready, like a real fintech product.
