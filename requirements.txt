@@ -3,3 +3,10 @@ uvicorn
 yfinance
 pandas
 numpy
+cachetools @ file:///C:/miniconda3/conda-bld/cachetools_1764867585295/work
+numpy @ file:///C:/Users/task_178034591152523/croot/numpy_and_numpy_base_1780346079294/work/dist/numpy-2.4.6-cp314-cp314-win_amd64.whl#sha256=2e5f4e9b225e7eeb21cf7894a604a93195c863192b831350bf8b2657c147f8af
+numpydoc @ file:///C:/Users/task_176777902963131/croot/numpydoc_1767779210567/work
+pandas @ file:///C:/Users/task_178007176530389/croot/pandas_1780071914142/work
+uvicorn @ file:///C:/Users/task_176822556655178/croot/uvicorn-split_1768226501670/work
+yfinance==1.7.0
+Note: you may need to restart the kernel to use updated packages.
