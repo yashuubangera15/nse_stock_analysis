@@ -1,3 +1,20 @@
+from cachetools import TTLCache
+import threading
+
+_hist_cache = TTLCache(maxsize=200, ttl=600)      # 10 min
+_fund_cache = TTLCache(maxsize=200, ttl=6*3600)   # fundamentals change quarterly
+_lock = threading.Lock()
+
+def get_history(ticker, period="2y"):
+    key = (ticker, period)
+    with _lock:
+        if key in _hist_cache:
+            return _hist_cache[key]
+    hist = yf.Ticker(ticker).history(period=period, auto_adjust=True)
+    if not hist.empty:
+        with _lock:
+            _hist_cache[key] = hist
+    return hist
 fastapi
 uvicorn
 yfinance
